@@ -8,91 +8,93 @@ from langchain_core.messages import HumanMessage
 st.set_page_config(page_title="Conscious Cart AI", layout="centered")
 st.title("Conscious Cart AI Agent 🛒")
 
-# --- Store API key persistently in session_state ---
+# --- Session State Initialization ---
 if "api_key" not in st.session_state:
     st.session_state.api_key = ""
+if "api_validated" not in st.session_state:
+    st.session_state.api_validated = False
 
-api_key = st.text_input("Enter your Gemini API Key:", type="password", value=st.session_state.api_key)
-if api_key:
-    st.session_state.api_key = api_key
+# --- API Key Input ---
+if not st.session_state.api_validated:
+    api_key = st.text_input("Enter your Gemini API Key:", type="password")
+    if api_key:
+        try:
+            # Try initializing the LLM to validate key
+            @st.cache_resource(show_spinner=False)
+            def load_llm(api_key):
+                return ChatGoogleGenerativeAI(
+                    model="models/gemini-1.5-flash-latest",
+                    temperature=0,
+                    google_api_key=api_key,
+                )
 
-# --- Initialize LLM (only once using cache_resource) ---
-@st.cache_resource(show_spinner=False)
-def load_llm(api_key):
-    return ChatGoogleGenerativeAI(
-        model="models/gemini-1.5-flash-latest",
-        temperature=0,
-        google_api_key=api_key,
-    )
+            llm = load_llm(api_key)  # Try to load LLM
+            st.session_state.api_key = api_key
+            st.session_state.api_validated = True
+            st.success("API key validated successfully!")
+        except Exception as e:
+            st.error(f"Invalid API key or connection error: {e}")
+            st.stop()
 
-llm = None
-if st.session_state.api_key:
-    try:
-        llm = load_llm(st.session_state.api_key)
-    except Exception as e:
-        st.error(f"Error initializing Gemini model: {e}")
-        st.stop()
-else:
-    st.info("Please enter your Gemini API key to continue.")
+# --- Proceed if API is validated ---
+if st.session_state.api_validated:
+    llm = load_llm(st.session_state.api_key)
 
-# --- Input: Product Name or URL ---
-product_input = st.text_input("Enter a Product NAME or URL:")
+    # --- Input: Product Name or URL ---
+    product_input = st.text_input("Enter a Product NAME or URL:")
 
+    # --- Function: Scrape Product Details ---
+    def scrape_product_details(url):
+        try:
+            resp = requests.get(url, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
+            soup = BeautifulSoup(resp.text, "html.parser")
+            title = soup.title.string.strip() if soup.title else "Unknown Product"
+            return title
+        except Exception as e:
+            return f"Error scraping: {e}"
 
-# --- Function: Scrape Product Details ---
-def scrape_product_details(url):
-    try:
-        resp = requests.get(url, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
-        soup = BeautifulSoup(resp.text, "html.parser")
-        title = soup.title.string.strip() if soup.title else "Unknown Product"
-        return title
-    except Exception as e:
-        return f"Error scraping: {e}"
+    # --- Function: Generate Product Description ---
+    def generate_details_from_name(name):
+        try:
+            response = llm.invoke([HumanMessage(content=f"Describe the product: {name}")])
+            return response.content
+        except Exception as e:
+            return f"Error generating details: {e}"
 
-# --- Function: Generate Product Description ---
-def generate_details_from_name(name):
-    try:
-        response = llm.invoke([HumanMessage(content=f"Describe the product: {name}")])
-        return response.content
-    except Exception as e:
-        return f"Error generating details: {e}"
+    # --- Function: Analyze Environmental Impact ---
+    def analyze_environmental_impact(details):
+        try:
+            response = llm.invoke([HumanMessage(content=f"Analyze the environmental impact of this product: {details}")])
+            return response.content
+        except Exception as e:
+            return f"Error analyzing impact: {e}"
 
-# --- Function: Analyze Environmental Impact ---
-def analyze_environmental_impact(details):
-    try:
-        response = llm.invoke([HumanMessage(content=f"Analyze the environmental impact of this product: {details}")])
-        return response.content
-    except Exception as e:
-        return f"Error analyzing impact: {e}"
+    # --- Function: Generate Recommendation ---
+    def generate_recommendation(impact):
+        try:
+            response = llm.invoke([HumanMessage(content=f"Based on this environmental impact, what would you recommend?: {impact}")])
+            return response.content
+        except Exception as e:
+            return f"Error generating recommendation: {e}"
 
-# --- Function: Generate Recommendation ---
-def generate_recommendation(impact):
-    try:
-        response = llm.invoke([HumanMessage(content=f"Based on this environmental impact, what would you recommend?: {impact}")])
-        return response.content
-    except Exception as e:
-        return f"Error generating recommendation: {e}"
-
-# --- Analyze Button ---
-if st.button("Analyze"):
-    if not llm:
-        st.warning("LLM is not initialized. Please enter your Gemini API key.")
-    elif not product_input:
-        st.warning("Please enter a product URL or name.")
-    else:
-        if product_input.lower().startswith("http"):
-            details = scrape_product_details(product_input)
+    # --- Analyze Button ---
+    if st.button("Analyze"):
+        if not product_input:
+            st.warning("Please enter a product URL or name.")
         else:
-            details = generate_details_from_name(product_input)
+            with st.spinner("Processing..."):
+                if product_input.lower().startswith("http"):
+                    details = scrape_product_details(product_input)
+                else:
+                    details = generate_details_from_name(product_input)
 
-        st.markdown("### 📦 Product Description")
-        st.markdown(details)
+                st.markdown("### 📦 Product Description")
+                st.markdown(details)
 
-        impact = analyze_environmental_impact(details)
-        st.markdown("### 🌍 Environmental Impact")
-        st.markdown(impact)
+                impact = analyze_environmental_impact(details)
+                st.markdown("### 🌍 Environmental Impact")
+                st.markdown(impact)
 
-        recommendation = generate_recommendation(impact)
-        st.markdown("### 📝 Final Recommendation")
-        st.markdown(recommendation)
-
+                recommendation = generate_recommendation(impact)
+                st.markdown("### 📝 Final Recommendation")
+                st.markdown(recommendation)
