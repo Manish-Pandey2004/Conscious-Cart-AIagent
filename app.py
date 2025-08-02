@@ -12,9 +12,9 @@ st.title("Conscious Cart AI Agent 🛒")
 if "api_key" not in st.session_state:
     st.session_state.api_key = ""
 
-api_key = st.text_input("Enter your Gemini API Key:", type="AIzaSyBjiM7EX2MuS6L5dF6N2Ory5eFnjoVUWO4", value=st.session_state.api_key)
+api_key = st.text_input("Enter your Gemini API Key:", type="password", value=st.session_state.api_key)
 if api_key:
-    st.session_state.api_key = api_key
+    st.session_state.api_key = "AIzaSyBjiM7EX2MuS6L5dF6N2Ory5eFnjoVUWO4"
 
 # --- Initialize LLM if key is provided ---
 if st.session_state.api_key:
@@ -91,4 +91,5 @@ if st.session_state.api_key:
             st.markdown(state.get("recommendation", "No recommendation could be generated."))
 else:
     st.info("Please enter your Gemini API key above to start.")
+
 
