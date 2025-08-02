@@ -20,15 +20,6 @@
 
 ---
 
-## 🧪 Installation
-
-1. **Clone the repo**  
-   ```bash
-   git clone https://github.com/JAYANTRANJANJHA/Conscious-Cart-AI-Agent.git
-   cd Conscious-Cart-AI-Agent
-
----
-
 ## 🌿 Key Features
 
 - 🔍 Accepts product names or URLs (e.g., Amazon links)
