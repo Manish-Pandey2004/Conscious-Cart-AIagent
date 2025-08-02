@@ -14,20 +14,21 @@ if "api_key" not in st.session_state:
 if "api_validated" not in st.session_state:
     st.session_state.api_validated = False
 
+# --- Function to Load LLM (only once) ---
+@st.cache_resource(show_spinner=False)
+def load_llm(api_key):
+    return ChatGoogleGenerativeAI(
+        model="models/gemini-1.5-flash-latest",
+        temperature=0,
+        google_api_key=api_key,
+    )
+
 # --- API Key Input ---
 if not st.session_state.api_validated:
     api_key = st.text_input("Enter your Gemini API Key:", type="password")
     if api_key:
         try:
             # Try initializing the LLM to validate key
-            @st.cache_resource(show_spinner=False)
-            def load_llm(api_key):
-                return ChatGoogleGenerativeAI(
-                    model="models/gemini-1.5-flash-latest",
-                    temperature=0,
-                    google_api_key=api_key,
-                )
-
             llm = load_llm(api_key)  # Try to load LLM
             st.session_state.api_key = api_key
             st.session_state.api_validated = True
