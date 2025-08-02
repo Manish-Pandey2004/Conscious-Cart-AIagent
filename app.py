@@ -14,7 +14,7 @@ st.title("Conscious Cart AI Agent 🛒")
 if "GOOGLE_API_KEY" not in os.environ:
     api_key = st.text_input("Enter your Gemini API Key:", type="password")
     if api_key:
-        os.environ["GOOGLE_API_KEY"] = api_key 
+        os.environ["GOOGLE_API_KEY"] = AIzaSyBjiM7EX2MuS6L5dF6N2Ory5eFnjoVUWO4
 
 # --- Initialize LLM if key is available ---
 if "GOOGLE_API_KEY" in os.environ:
@@ -88,4 +88,5 @@ if "GOOGLE_API_KEY" in os.environ:
 
 else:
     st.info("Please enter your Gemini API key above to start.")
+
 
