@@ -20,7 +20,7 @@ if "GOOGLE_API_KEY" in os.environ:
 
     st.title("Conscious Cart AI Agent 🛒")
 
-    product_input = st.text_input("Enter a product URL or product name:")
+    product_input = st.text_input("Enter a product NAME or product URL:")
 
     # --- Define required functions ---
     def scrape_product_details(state):
@@ -73,4 +73,5 @@ if "GOOGLE_API_KEY" in os.environ:
             st.markdown(state.get("recommendation", "No recommendation could be generated."))
 
 else:
+
     st.warning("Please enter your Gemini API key above.")
