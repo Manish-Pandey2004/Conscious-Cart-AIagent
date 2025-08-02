@@ -12,31 +12,33 @@ st.title("Conscious Cart AI Agent 🛒")
 product_input = st.text_input("Enter a Product NAME or URL:")
 
 # --- Store API key persistently in session_state ---
- if "api_key" not in st.session_state:
-     st.session_state.api_key = ""
+if "api_key" not in st.session_state:
+    st.session_state.api_key = ""
 
- api_key = st.text_input("Enter your Gemini API Key:", type="password", value=st.session_state.api_key)
- if api_key:
-     st.session_state.api_key = api_key
+api_key = st.text_input("Enter your Gemini API Key:", type="password", value=st.session_state.api_key)
+if api_key:
+    st.session_state.api_key = api_key
 
-# --- Initialize LLM if key is provided ---
- if st.session_state.api_key:
-     try:
-         llm = ChatGoogleGenerativeAI(
-             model="models/gemini-1.5-flash-latest",
-             temperature=0,
-             google_api_key=st.session_state.api_key,  
-         )
-     except Exception as e:
-         st.error(f"Error initializing Gemini model: {e}")
-         st.stop()
+# --- Initialize LLM (only once using cache_resource) ---
+@st.cache_resource(show_spinner=False)
+def load_llm(api_key):
+    return ChatGoogleGenerativeAI(
+        model="models/gemini-1.5-flash-latest",
+        temperature=0,
+        google_api_key=api_key,
+    )
 
+llm = None
+if st.session_state.api_key:
+    try:
+        llm = load_llm(st.session_state.api_key)
+    except Exception as e:
+        st.error(f"Error initializing Gemini model: {e}")
+        st.stop()
+else:
+    st.info("Please enter your Gemini API key to continue.")
 
-
-# ------------------------------
-
-
-# --- Define Function: Scrape Product Details ---
+# --- Function: Scrape Product Details ---
 def scrape_product_details(url):
     try:
         resp = requests.get(url, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
@@ -46,7 +48,7 @@ def scrape_product_details(url):
     except Exception as e:
         return f"Error scraping: {e}"
 
-# --- Define Function: Generate Product Description ---
+# --- Function: Generate Product Description ---
 def generate_details_from_name(name):
     try:
         response = llm.invoke([HumanMessage(content=f"Describe the product: {name}")])
@@ -54,7 +56,7 @@ def generate_details_from_name(name):
     except Exception as e:
         return f"Error generating details: {e}"
 
-# --- Define Function: Analyze Environmental Impact ---
+# --- Function: Analyze Environmental Impact ---
 def analyze_environmental_impact(details):
     try:
         response = llm.invoke([HumanMessage(content=f"Analyze the environmental impact of this product: {details}")])
@@ -62,7 +64,7 @@ def analyze_environmental_impact(details):
     except Exception as e:
         return f"Error analyzing impact: {e}"
 
-# --- Define Function: Generate Recommendation ---
+# --- Function: Generate Recommendation ---
 def generate_recommendation(impact):
     try:
         response = llm.invoke([HumanMessage(content=f"Based on this environmental impact, what would you recommend?: {impact}")])
@@ -72,7 +74,9 @@ def generate_recommendation(impact):
 
 # --- Analyze Button ---
 if st.button("Analyze"):
-    if not product_input:
+    if not llm:
+        st.warning("LLM is not initialized. Please enter your Gemini API key.")
+    elif not product_input:
         st.warning("Please enter a product URL or name.")
     else:
         if product_input.lower().startswith("http"):
@@ -90,31 +94,3 @@ if st.button("Analyze"):
         recommendation = generate_recommendation(impact)
         st.markdown("### 📝 Final Recommendation")
         st.markdown(recommendation)
-
-
-
-
-
-
-'''
-# --- Hardcoded Gemini API Key ---
-GEMINI_API_KEY = "AIzaSyBjiM7EX2MuS6L5dF6N2Ory5eFnjoVUWO4"  # ⚠️ Consider storing securely
-
-# --- Initialize LLM ---
-@st.cache_resource(show_spinner=False)
-def load_llm(api_key):
-    try:
-        return ChatGoogleGenerativeAI(
-            model="models/gemini-1.5-flash-latest",
-            temperature=0,
-            google_api_key=api_key,
-        )
-    except Exception as e:
-        st.error(f"Error initializing Gemini model: {e}")
-        return None
-
-llm = load_llm(GEMINI_API_KEY)
-if llm is None:
-    st.stop()
-
-# -----------------------------'''
