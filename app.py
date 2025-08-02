@@ -8,9 +8,6 @@ from langchain_core.messages import HumanMessage
 st.set_page_config(page_title="Conscious Cart AI", layout="centered")
 st.title("Conscious Cart AI Agent 🛒")
 
-# --- Input: Product Name or URL ---
-product_input = st.text_input("Enter a Product NAME or URL:")
-
 # --- Store API key persistently in session_state ---
 if "api_key" not in st.session_state:
     st.session_state.api_key = ""
@@ -37,6 +34,10 @@ if st.session_state.api_key:
         st.stop()
 else:
     st.info("Please enter your Gemini API key to continue.")
+
+# --- Input: Product Name or URL ---
+product_input = st.text_input("Enter a Product NAME or URL:")
+
 
 # --- Function: Scrape Product Details ---
 def scrape_product_details(url):
@@ -94,3 +95,4 @@ if st.button("Analyze"):
         recommendation = generate_recommendation(impact)
         st.markdown("### 📝 Final Recommendation")
         st.markdown(recommendation)
+
