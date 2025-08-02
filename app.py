@@ -13,7 +13,7 @@ from langchain_core.messages import HumanMessage
 if "GOOGLE_API_KEY" not in os.environ:
     api_key = st.text_input("Enter your Gemini API Key:", type="password")
     if api_key:
-        os.environ["GOOGLE_API_KEY"] = api_key
+        os.environ["GOOGLE_API_KEY"] = AIzaSyBjiM7EX2MuS6L5dF6N2Ory5eFnjoVUWO4
 
 if "GOOGLE_API_KEY" in os.environ:
     llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-latest", temperature=0)
@@ -75,3 +75,4 @@ if "GOOGLE_API_KEY" in os.environ:
 else:
 
     st.warning("Please enter your Gemini API key above.")
+
