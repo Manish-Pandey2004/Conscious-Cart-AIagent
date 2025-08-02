@@ -1,8 +1,6 @@
 import streamlit as st
-import os
 import requests
 from bs4 import BeautifulSoup
-from langgraph.graph import StateGraph, END  # Not used, consider removing if unused
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
 
@@ -10,16 +8,22 @@ from langchain_core.messages import HumanMessage
 st.set_page_config(page_title="Conscious Cart AI", layout="centered")
 st.title("Conscious Cart AI Agent 🛒")
 
-# --- API Key Input ---
-if "GOOGLE_API_KEY" not in os.environ:
-    api_key = st.text_input("Enter your Gemini API Key:", type="password")
-    if api_key:
-        os.environ["GOOGLE_API_KEY"] = AIzaSyBjiM7EX2MuS6L5dF6N2Ory5eFnjoVUWO4
+# --- Store API key persistently in session_state ---
+if "api_key" not in st.session_state:
+    st.session_state.api_key = ""
 
-# --- Initialize LLM if key is available ---
-if "GOOGLE_API_KEY" in os.environ:
+api_key = st.text_input("Enter your Gemini API Key:", type="password", value=st.session_state.api_key)
+if api_key:
+    st.session_state.api_key = api_key
+
+# --- Initialize LLM if key is provided ---
+if st.session_state.api_key:
     try:
-        llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-latest", temperature=0)
+        llm = ChatGoogleGenerativeAI(
+            model="models/gemini-1.5-flash-latest",
+            temperature=0,
+            google_api_key=st.session_state.api_key,  # ✅ Pass key directly
+        )
     except Exception as e:
         st.error(f"Error initializing Gemini model: {e}")
         st.stop()
@@ -85,8 +89,5 @@ if "GOOGLE_API_KEY" in os.environ:
 
             st.markdown("### 📝 Final Recommendation")
             st.markdown(state.get("recommendation", "No recommendation could be generated."))
-
 else:
     st.info("Please enter your Gemini API key above to start.")
-
-
