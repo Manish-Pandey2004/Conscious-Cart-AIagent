@@ -92,26 +92,3 @@ if st.button("Analyze"):
 
 
 
-
-# ------------------------------
-
-# --- Store API key persistently in session_state ---
-# if "api_key" not in st.session_state:
-#     st.session_state.api_key = ""
-#
-# api_key = st.text_input("Enter your Gemini API Key:", type="password", value=st.session_state.api_key)
-# if api_key:
-#     st.session_state.api_key = api_key
-#
-# --- Initialize LLM if key is provided ---
-# if st.session_state.api_key:
-#     try:
-#         llm = ChatGoogleGenerativeAI(
-#             model="models/gemini-1.5-flash-latest",
-#             temperature=0,
-#             google_api_key=st.session_state.api_key,  
-#         )
-#     except Exception as e:
-#         st.error(f"Error initializing Gemini model: {e}")
-#         st.stop()
-# ------------------------------
