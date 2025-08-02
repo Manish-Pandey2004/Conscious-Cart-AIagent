@@ -4,6 +4,31 @@
 
 ---
 
+👉 **Try it live on Streamlit:**  
+🔗 [https://conscious-cart-ai-agent-v3.streamlit.app/](https://conscious-cart-ai-agent-v3.streamlit.app/)
+
+---
+
+## 🚀 What's New
+
+- 🌐 **Live demo link added**
+- 📦 **Installation & Setup** guides
+- 🔧 **Requirements & Architecture** details
+- 🧪 **Usage & Examples** refined
+- 🧬 **Agent Workflow** clarified
+- 🤝 **Contribution guidelines** included
+
+---
+
+## 🧪 Installation
+
+1. **Clone the repo**  
+   ```bash
+   git clone https://github.com/JAYANTRANJANJHA/Conscious-Cart-AI-Agent.git
+   cd Conscious-Cart-AI-Agent
+
+---
+
 ## 🌿 Key Features
 
 - 🔍 Accepts product names or URLs (e.g., Amazon links)
