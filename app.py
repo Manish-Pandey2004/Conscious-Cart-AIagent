@@ -7,7 +7,7 @@ from langchain_core.messages import HumanMessage
 # --- Setup Streamlit UI ---
 st.set_page_config(page_title="Conscious Cart AI", layout="centered")
 st.title("Conscious Cart AI Agent 🛒")
-st.write("by Raghav, Jayant")
+st.write("by Code Craft")
 
 # --- Image ---
 image_url = "https://pbs.twimg.com/media/GxV9tYzX0AAPL2W.jpg"  # Ensure this is a valid image URL
@@ -114,4 +114,5 @@ if st.session_state.api_validated:
                 recommendation = generate_recommendation(impact)
                 st.markdown("### 📝 Final Recommendation")
                 st.markdown(recommendation)
+
 
