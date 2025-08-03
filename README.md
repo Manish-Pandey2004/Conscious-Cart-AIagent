@@ -27,7 +27,11 @@
     * 🤔 **NEUTRAL**: The product has a mixed or average environmental impact.
 
 ---
+## 🌍 Aligning with Global Goals
 
+This project directly contributes to **Goal 12: Responsible Consumption and Production** of the United Nations' Sustainable Development Goals. By providing transparent, AI-driven insights into the environmental impact of products, Conscious Cart equips consumers with the necessary tools to make informed and responsible choices, fostering a global shift towards more sustainable consumption patterns.
+
+---
 ## 🧬 How It Works: The Agent Workflow
 
 The Conscious Cart agent follows a logical, multi-step process to deliver its analysis:
