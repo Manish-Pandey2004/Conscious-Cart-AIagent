@@ -122,7 +122,8 @@ Contributions are welcome! Whether it's improving the scraper, refining the prom
 
 ## 📄 License
 
-This project is licensed under the License - see the `LICENSE` file for details.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
