@@ -9,6 +9,10 @@ st.set_page_config(page_title="Conscious Cart AI", layout="centered")
 st.title("Conscious Cart AI Agent 🛒")
 st.write("by Raghav, Jayant")
 
+# --- Image ---
+image_url = "https://images.app.goo.gl/HQaBnV6a5poZ5DEi8"  
+st.image(image_url, caption="Conscious Cart AI", use_column_width=True)
+
 # --- Session State Initialization ---
 if "api_key" not in st.session_state:
     st.session_state.api_key = ""
@@ -106,5 +110,6 @@ if st.session_state.api_validated:
                 recommendation = generate_recommendation(impact)
                 st.markdown("### 📝 Final Recommendation")
                 st.markdown(recommendation)
+
 
 
