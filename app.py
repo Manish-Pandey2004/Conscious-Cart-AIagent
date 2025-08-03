@@ -7,7 +7,7 @@ from langchain_core.messages import HumanMessage
 # --- Setup Streamlit UI ---
 st.set_page_config(page_title="Conscious Cart AI", layout="centered")
 st.title("Conscious Cart AI Agent 🛒")
-st.write("by Raghav, Jrj")
+st.write("by Raghav, Jayant")
 
 # --- Session State Initialization ---
 if "api_key" not in st.session_state:
@@ -106,4 +106,5 @@ if st.session_state.api_validated:
                 recommendation = generate_recommendation(impact)
                 st.markdown("### 📝 Final Recommendation")
                 st.markdown(recommendation)
+
 
