@@ -10,7 +10,7 @@ st.title("Conscious Cart AI Agent 🛒")
 st.write("by Raghav, Jayant")
 
 # --- Image ---
-image_url = "https://pbs.twimg.com/media/GxV9tYzX0AAPL2W.jpg"  
+image_url = "https://pbs.twimg.com/media/GxV9tYzX0AAPL2W.jpg"  # Ensure this is a valid image URL
 st.image(image_url, caption="Conscious Cart AI", use_column_width=True)
 
 # --- Session State Initialization ---
@@ -33,8 +33,8 @@ if not st.session_state.api_validated:
     api_key = st.text_input("Enter your Gemini API Key:", type="password")
     if api_key:
         try:
-            # Try initializing the LLM to validate key
-            llm = load_llm(api_key)  # Try to load LLM
+            # Try initializing the LLM to validate the key
+            llm = load_llm(api_key)
             # ACTUALLY INVOKE A TEST PROMPT TO VALIDATE KEY
             _ = llm.invoke([HumanMessage(content="Say hello")])
 
@@ -46,7 +46,6 @@ if not st.session_state.api_validated:
             st.error(f"API validation failed: {str(e)}")
             st.exception(e)  # Optional: shows full traceback in Streamlit
             st.stop()
-
 
 # --- Proceed if API is validated ---
 if st.session_state.api_validated:
@@ -110,7 +109,3 @@ if st.session_state.api_validated:
                 recommendation = generate_recommendation(impact)
                 st.markdown("### 📝 Final Recommendation")
                 st.markdown(recommendation)
-
-
-
-
