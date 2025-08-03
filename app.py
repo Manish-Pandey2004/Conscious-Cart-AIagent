@@ -28,15 +28,20 @@ def load_llm(api_key):
 if not st.session_state.api_validated:
     api_key = st.text_input("Enter your Gemini API Key:", type="password")
     if api_key:
-        try:
-            # Try initializing the LLM to validate key
-            llm = load_llm(api_key)  # Try to load LLM
-            st.session_state.api_key = api_key
-            st.session_state.api_validated = True
-            st.success("API key validated successfully!")
-        except Exception as e:
-            st.error(f"Invalid API key or connection error: {e}")
-            st.stop()
+    try:
+        # Try initializing the LLM to validate key
+        llm = load_llm(api_key)  # Try to load LLM
+        # ACTUALLY INVOKE A TEST PROMPT TO VALIDATE KEY
+        _ = llm.invoke([HumanMessage(content="Say hello")])
+
+        st.session_state.api_key = api_key
+        st.session_state.api_validated = True
+        st.success("API key validated successfully!")
+    except Exception as e:
+    import traceback
+    st.error(f"API validation failed: {str(e)}")
+    st.exception(e)  # Optional: shows full traceback in Streamlit
+    st.stop()
 
 # --- Proceed if API is validated ---
 if st.session_state.api_validated:
@@ -100,6 +105,7 @@ if st.session_state.api_validated:
                 recommendation = generate_recommendation(impact)
                 st.markdown("### 📝 Final Recommendation")
                 st.markdown(recommendation)
+
 
 
 
