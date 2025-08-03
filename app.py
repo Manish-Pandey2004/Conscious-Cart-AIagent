@@ -15,7 +15,9 @@ st.image(image_url, caption="Conscious Cart AI", use_container_width=True)  # us
 # --- Image ---
 image_url = "https://preview.redd.it/how-did-the-hakla-meme-even-start-v0-yo1essir8fgf1.jpeg?width=1051&format=pjpg&auto=webp&s=ef70f63703efe3a90b51e5b4e9ead939a2e4bf89"  # Ensure this is a valid image URL
 st.image(image_url, caption="Conscious Cart AI", use_container_width=True)  # use_container_width instead of use_column_width
-
+# --- Image ---
+image_url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhBA4T_BrpjbjhLr1yAdUDnJgME2ebJQ40qw&s"  # Ensure this is a valid image URL
+st.image(image_url, caption="Conscious Cart AI", use_container_width=True)  # use_container_width instead of use_column_width
 # --- Session State Initialization ---
 if "api_key" not in st.session_state:
     st.session_state.api_key = ""
@@ -112,3 +114,4 @@ if st.session_state.api_validated:
                 recommendation = generate_recommendation(impact)
                 st.markdown("### 📝 Final Recommendation")
                 st.markdown(recommendation)
+
