@@ -38,10 +38,9 @@ if not st.session_state.api_validated:
         st.session_state.api_validated = True
         st.success("API key validated successfully!")
     except Exception as e:
-    import traceback
-    st.error(f"API validation failed: {str(e)}")
-    st.exception(e)  # Optional: shows full traceback in Streamlit
-    st.stop()
+        st.error(f"Invalid API key or connection error: {e}")
+        st.stop()
+
 
 # --- Proceed if API is validated ---
 if st.session_state.api_validated:
@@ -105,6 +104,7 @@ if st.session_state.api_validated:
                 recommendation = generate_recommendation(impact)
                 st.markdown("### 📝 Final Recommendation")
                 st.markdown(recommendation)
+
 
 
 
