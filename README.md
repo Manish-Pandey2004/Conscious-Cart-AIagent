@@ -1,7 +1,6 @@
 # 🛒 Conscious Cart – AI-Powered Eco Product Analyzer
 
 **Conscious Cart** is an intelligent agent designed to empower consumers to make environmentally conscious shopping decisions. By simply providing a product name or a URL, users can get an instant, AI-driven analysis of the product's environmental impact, complete with recommendations for more sustainable alternatives. This tool leverages the power of **Google Gemini** to deliver insightful and actionable advice, helping you shop smarter and greener.
-
 ---
 
 ## 🚀 Live Demo
